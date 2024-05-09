@@ -22,9 +22,27 @@
 /**************************************************************************/
 
 #include "patcher.h"
+#include "version.h"
 
 int main() {
     Patcher patcher;
-    patcher.patch();
+    std::string command;
+
+    std::cout << "Welcome to patcher version " << VERSION_STRING << ".\n";
+    std::cout << "Add a module by typing it's name or 'run' to patch the godot solution.\n";
+
+    while (std::cin >> command) {
+        if (command == "quit") {
+            std::cout << "Exiting\n";
+            break;
+        } else if (command == "run") {
+            patcher.patch();
+            break;
+        } else {
+            std::cout << "Adding module " << command << "\n";
+            patcher.add_module(command);
+        }
+    }
+
     return EXIT_SUCCESS;
 }

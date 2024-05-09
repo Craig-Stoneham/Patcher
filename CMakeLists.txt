@@ -41,18 +41,18 @@ set(BIN_DIR ${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/$<CONFIG>)
 
 ################################################################
 
-set(MODULE_NAME "my_module" CACHE STRING "The name of the module")
-set(SOLUTION_NAME "godot" CACHE INTERNAL "The name of the the godot solution")
+#set(MODULE_NAME "my_module" CACHE STRING "The name of the module")
+#set(SOLUTION_NAME "godot" CACHE INTERNAL "The name of the the godot solution")
 
 ################################################################
 
-if(MODULE_NAME STREQUAL "")
-  message(FATAL_ERROR "MODULE_NAME is not a valid string")
-endif()
+#if(MODULE_NAME STREQUAL "")
+#  message(FATAL_ERROR "MODULE_NAME is not a valid string")
+#endif()
 
-if(SOLUTION_NAME STREQUAL "")
-  message(FATAL_ERROR "SOLUTION_NAME is not a valid string")
-endif()
+#if(SOLUTION_NAME STREQUAL "")
+#  message(FATAL_ERROR "SOLUTION_NAME is not a valid string")
+#endif()
 
 ################################################################
 
@@ -70,8 +70,8 @@ file(GLOB_RECURSE PUGIXML_SOURCES ${PUGIXML_DIR}/*.cpp)
 add_executable(patcher ${ENGINE_LIBRARY_TYPE} ${patcher_HEADERS} ${patcher_SOURCES} ${PUGIXML_HEADERS} ${PUGIXML_SOURCES})
 
 #
-target_compile_definitions(patcher PUBLIC MODULE_NAME="${MODULE_NAME}")
-target_compile_definitions(patcher PUBLIC SOLUTION_NAME="${SOLUTION_NAME}")
+#target_compile_definitions(patcher PUBLIC MODULE_NAME="${MODULE_NAME}")
+#target_compile_definitions(patcher PUBLIC SOLUTION_NAME="${SOLUTION_NAME}")
 
 if(${REVERSE_ORDER})
     target_compile_definitions(patcher PRIVATE REVERSE_ORDER_ENABLED)

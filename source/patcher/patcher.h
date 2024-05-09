@@ -30,13 +30,19 @@ public:
 	Patcher() = default;
 	~Patcher() = default;
 
-    void patch() const;
+    void add_module(const std::string &p_module);
+
+    void patch();
 
 private:
     bool find_solution(const fs::path &p_path, const std::string &p_solution_name, std::string &p_result) const;
-    void insert_filter(pugi::xml_node p_node, const std::string &p_name) const;
-    bool patch_path(std::string &p_name, const std::string &dir_type, const std::vector<std::string> &directories) const;
-    bool patch_name(std::string &p_name, const std::vector<std::string> &directories) const;
-    bool patch_module_name(std::string &p_name, const std::string &module_name) const;
-    void patch_solution(pugi::xml_document &xml, const std::vector<std::string> &directories, const std::string &module_name) const;
+    void add_filter(pugi::xml_node p_node, const std::string &p_name);
+    bool patch_name(std::string &p_name) const;
+    void patch_solution();
+
+private:
+    const std::vector<std::string> directories = { "core", "drivers", "editor", "main", "misc", "modules", "platform", "scene", "servers", "tests", "thirdparty" };
+    const std::string solution_name = "godot.vcxproj.filters";
+    std::vector<std::string> modules;
+    pugi::xml_document document;
 };
