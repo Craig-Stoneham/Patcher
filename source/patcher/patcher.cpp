@@ -49,13 +49,6 @@ void Patcher::patch() {
         return;
     }
 
-    /*if (modules.size()) {
-        std::cout << "Modules:\n";
-		for (const std::string &module : modules) {
-			std::cout << "\t" << module << "\n";
-		}
-	}*/
-
     patch_solution();
 
     if (!document.save_file(solution_path.c_str())) {
@@ -100,7 +93,10 @@ void Patcher::add_filter(pugi::xml_node p_node, const std::string &p_name) {
 }
 
 bool Patcher::patch_name(std::string &p_name) const {
+    bool patched = false;
+
     for (const std::string &module : modules) {
+        // Iterate through all of the modules as some may be a submodule
         size_t module_pos = p_name.find(module);
         if (module_pos != std::string::npos) {
             const std::string header_files = "Header Files\\";
@@ -117,28 +113,27 @@ bool Patcher::patch_name(std::string &p_name) const {
 
             if (insert_at != std::string::npos) {
                 p_name.erase(insert_at, module_pos - insert_at);
-                return true;
+                patched = true;
             }
-            return false;
         }
     }
 
-    for (const std::string &dir : directories) {
-        const std::string header_path = "Header Files\\" + dir;
-        const std::string source_path = "Source Files\\" + dir;
+    for (const std::string &directory : directories) {
+        const std::string header_path = "Header Files\\" + directory;
+        const std::string source_path = "Source Files\\" + directory;
 
         if (p_name.find(header_path) != std::string::npos) {
-            p_name.replace(0, header_path.size(), "Header Files\\godot\\" + dir);
-            return true;
+            p_name.replace(0, header_path.size(), "Header Files\\godot\\" + directory);
+            patched = true;
         }
 
         if (p_name.find(source_path) != std::string::npos) {
-            p_name.replace(0, source_path.size(), "Source Files\\godot\\" + dir);
-            return true;
+            p_name.replace(0, source_path.size(), "Source Files\\godot\\" + directory);
+            patched = true;
         }
     }
 
-    return false;
+    return patched;
 }
 
 void Patcher::patch_solution() {
@@ -150,7 +145,8 @@ void Patcher::patch_solution() {
 
     for (pugi::xml_node item_group = filters; item_group; item_group = item_group.next_sibling()) {
         for (pugi::xml_node node : item_group.children()) {
-            std::string name = node.name(), path;
+            const std::string name = node.name();
+            std::string path;
             if (name == "Filter") {
                 path = node.first_attribute().value();
                 if (patch_name(path)) {
