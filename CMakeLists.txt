@@ -23,7 +23,7 @@ message("patcher Version: ${VERSION_STRING}")
 
 ################################################################
 
-project(patcher)
+project(patcher VERSION ${VERSION_STRING} LANGUAGES CXX)
 
 ################################################################
 
